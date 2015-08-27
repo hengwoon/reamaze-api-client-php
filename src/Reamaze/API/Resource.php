@@ -3,14 +3,15 @@
 namespace Reamaze\API;
 
 use Reamaze\API\Config;
-use Reamaze\API\Clients\CurlClient as Client;
+use Reamaze\API\Clients\CurlClient;
+use Reamaze\API\Clients\WpHttpClient;
 /**
  * Abstract Class Resource
  *
  * @package Reamaze\API
  */
 abstract class Resource {
-    protected static $API_VERSION = 'v1';
+    public static $API_VERSION = 'v1';
 
     public static $client = null;
 
@@ -32,7 +33,11 @@ abstract class Resource {
 
     public static function getClient() {
         if (!self::$client) {
-            self::$client = Client::getInstance();
+            if ( function_exists( 'curl_version' ) ) {
+                self::setClient( new CurlClient() );
+            } else {
+                self::setClient( new WpHttpClient() );
+            }
         }
 
         return self::$client;

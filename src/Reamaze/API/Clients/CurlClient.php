@@ -5,24 +5,7 @@ namespace Reamaze\API\Clients;
 use Reamaze\API\Config;
 use Reamaze\API\Exceptions\Api as ApiException;
 
-class CurlClient {
-    private static $instance;
-
-    public static function getInstance() {
-        if (!self::$instance) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
-    }
-
-    public static function getHeaders() {
-        return array(
-            'Content-Type: application/json',
-            'Accept: application/json'
-        );
-    }
-
+class CurlClient extends BaseClient {
     public function makeRequest($method, $url, $params = null) {
         $curl = curl_init();
         $method = strtolower($method);
